@@ -6,6 +6,7 @@ User = get_user_model()
 
 NAME_MAX_LENGTH = 250
 
+
 class Ingredient(models.Model):
     name = models.CharField(
         'Название ингредиента',
@@ -31,11 +32,6 @@ class Tag(models.Model):
         db_index=True,
         unique=True
     )
-    # color = models.CharField(
-    #     'Цвет',
-    #     max_length=7,
-    #     unique=True
-    # )
     slug = models.SlugField(
         'Слаг тэга',
         max_length=NAME_MAX_LENGTH,

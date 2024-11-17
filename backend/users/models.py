@@ -3,7 +3,6 @@ from django.db import models
 
 from .validators import UsernameValidator
 
-
 MAX_EMAIL_LENGTH = 250
 MAX_NAME_LENGTH = 150
 HELP_TEXT = 'Обязательное поле для заполнения'
@@ -80,12 +79,12 @@ class Subscription(models.Model):
     class Meta:
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
                 fields=('user', 'author'),
                 name='unique_subscription'
-            )
-        ]
+            ),
+        )
 
     def __str__(self):
         return f'{self.user.username} подписан на {self.author.username}'
