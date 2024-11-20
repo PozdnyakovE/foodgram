@@ -16,7 +16,7 @@ class User(AbstractUser):
         blank=False,
         null=False,
         db_index=True,
-        help_text = HELP_TEXT
+        help_text=HELP_TEXT
     )
     username = models.CharField(
         'Уникальное имя пользователя (никнейм)',
@@ -24,7 +24,7 @@ class User(AbstractUser):
         unique=True,
         blank=False,
         null=False,
-        help_text = HELP_TEXT,
+        help_text=HELP_TEXT,
         validators=(UsernameValidator, )
     )
     first_name = models.CharField(
@@ -32,14 +32,14 @@ class User(AbstractUser):
         max_length=MAX_NAME_LENGTH,
         blank=False,
         null=False,
-        help_text = HELP_TEXT
+        help_text=HELP_TEXT
     )
     last_name = models.CharField(
         'Фамилия',
         max_length=MAX_NAME_LENGTH,
         blank=False,
         null=False,
-        help_text = HELP_TEXT
+        help_text=HELP_TEXT
     )
     password = models.CharField(
         'Пароль',

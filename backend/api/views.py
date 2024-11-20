@@ -1,3 +1,5 @@
+import os
+
 from django.contrib.auth import get_user_model
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Sum
@@ -5,20 +7,25 @@ from django.shortcuts import HttpResponse, get_object_or_404
 from djoser.views import UserViewSet
 from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import (IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 
 from api.filters import IngredientFilter, RecipeFilter
-from recipes.models import Ingredient, Recipe, RecipeIngredient, ShoppingCart, Tag, Favorites
+from recipes.models import (Ingredient, Recipe, RecipeIngredient,
+                            ShoppingCart, Tag, Favorites)
 from users.models import Subscription
-from .serializers import (AvatarUpdateSerializer, IngredientSerializer, FavoritesSerializer,
-                          RecipeAddSerializer, RecipeGetSerializer, ShoppingCartSerializer, TagSerialiser, 
-                          UserMakeSubscribeSerializer, UserSubscriptionsSerializer)
+from .serializers import (AvatarUpdateSerializer, IngredientSerializer,
+                          FavoritesSerializer, RecipeAddSerializer,
+                          RecipeGetSerializer, ShoppingCartSerializer,
+                          TagSerialiser, UserMakeSubscribeSerializer,
+                          UserSubscriptionsSerializer)
 
 
 User = get_user_model()
 
-BASE_URL = 'http://127.0.0.1:8000/'
+# BASE_URL = 'http://127.0.0.1:8000/'
+BASE_URL = os.getenv('BASE_URL')
 
 
 class SubscriptionsUserViewSet(UserViewSet):

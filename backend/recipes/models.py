@@ -25,6 +25,7 @@ class Ingredient(models.Model):
     def __str__(self):
         return self.name
 
+
 class Tag(models.Model):
     name = models.CharField(
         'Название тэга',
@@ -45,7 +46,7 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
-    
+
 
 class Recipe(models.Model):
     name = models.CharField(
@@ -164,7 +165,7 @@ class Favorites(models.Model):
 
     def __str__(self):
         return f'{self.recipe.name} в избранном у {self.user.username}'
-    
+
 
 class ShoppingCart(models.Model):
     user = models.ForeignKey(
