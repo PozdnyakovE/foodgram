@@ -38,14 +38,15 @@ class UserInfoSerializer(UserSerializer):
         if request.path == USERS_ME_PATH and not request.user.is_authenticated:
             raise AuthenticationFailed
         return super().to_representation(instance)
-    
+
 
 class UserRegistrationSerializer(UserCreateSerializer):
     """Сериализатор для создания объектов модели пользователя."""
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'username', 'first_name', 'last_name', 'password')
+        fields = ('id', 'email', 'username', 'first_name', 'last_name',
+                  'password')
 
 
 class AvatarUpdateSerializer(serializers.ModelSerializer):
@@ -63,7 +64,7 @@ class AvatarUpdateSerializer(serializers.ModelSerializer):
             instance.avatar = avatar
         instance.save()
         return instance
-    
+
 
 class RecipeShortSerializer(serializers.ModelSerializer):
     """Сериализатор для краткого отображения рецептов."""
@@ -89,7 +90,8 @@ class UserSubscriptionsSerializer(UserInfoSerializer):
         request = self.context.get('request')
         if request is None or request.user.is_anonymous:
             return False
-        return Subscription.objects.filter(user=request.user, author=obj).exists()
+        return Subscription.objects.filter(
+            user=request.user, author=obj).exists()
 
     def get_recipes(self, obj):
         request = self.context.get('request')
@@ -101,7 +103,7 @@ class UserSubscriptionsSerializer(UserInfoSerializer):
 
     def get_recipes_count(self, obj):
         return obj.recipes.all().count()
-    
+
 
 class UserMakeSubscribeSerializer(serializers.ModelSerializer):
     """Сериализатор для работы с подпиской/отпиской."""
@@ -164,7 +166,9 @@ class IngredientGetSerializer(serializers.ModelSerializer):
 
     id = serializers.ReadOnlyField(source='ingredient.id')
     name = serializers.ReadOnlyField(source='ingredient.name')
-    measurement_unit = serializers.ReadOnlyField(source='ingredient.measurement_unit')
+    measurement_unit = serializers.ReadOnlyField(
+        source='ingredient.measurement_unit'
+    )
 
     class Meta:
         model = RecipeIngredient
@@ -190,7 +194,8 @@ class RecipeGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = ('id', 'tags', 'author', 'ingredients', 'name',
-                  'image', 'text', 'cooking_time', 'is_favorited', 'is_in_shopping_cart')
+                  'image', 'text', 'cooking_time', 'is_favorited',
+                  'is_in_shopping_cart')
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
@@ -202,8 +207,9 @@ class RecipeGetSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         if request is None or request.user.is_anonymous:
             return False
-        return ShoppingCart.objects.filter(user=request.user, recipe=obj).exists()
-    
+        return ShoppingCart.objects.filter(
+            user=request.user, recipe=obj).exists()
+
 
 class RecipeAddSerializer(serializers.ModelSerializer):
     """Сериализатор для добавления объектов модели рецептов."""
@@ -224,10 +230,12 @@ class RecipeAddSerializer(serializers.ModelSerializer):
         tags_data = attrs.get('tags')
         cooking_time_data = attrs.get('cooking_time')
         image_data = attrs.get('image')
-        for item in [ingredients_data, tags_data, cooking_time_data, image_data]:
+        for item in [ingredients_data, tags_data, cooking_time_data,
+                     image_data]:
             if not item:
                 raise serializers.ValidationError(
-                    'Поля image, cooking_time, ingredients, tags не могут быть пустыми.'
+                    '''Поля image, cooking_time, ingredients,
+                    'tags не могут быть пустыми.'''
                 )
         ingredient_ids = [ingredient['id'] for ingredient in ingredients_data]
         tags_ids = [tag for tag in tags_data]
@@ -248,7 +256,6 @@ class RecipeAddSerializer(serializers.ModelSerializer):
                     {'ingredients': f'Для ингредиента с id {ingredient_id} '
                                     f'количество должно быть больше 0.'})
         return attrs
-        
 
     @transaction.atomic
     def create(self, validated_data):
