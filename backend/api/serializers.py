@@ -68,6 +68,9 @@ class AvatarUpdateSerializer(serializers.ModelSerializer):
 
 class RecipeShortSerializer(serializers.ModelSerializer):
     """Сериализатор для краткого отображения рецептов."""
+    image = Base64ImageField(read_only=True)
+    name = serializers.ReadOnlyField()
+    cooking_time = serializers.ReadOnlyField()
 
     class Meta:
         model = Recipe
@@ -218,12 +221,15 @@ class RecipeAddSerializer(serializers.ModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(),
                                               many=True,
                                               required=True,)
-    image = Base64ImageField(required=True)
+    image = Base64ImageField()
 
     class Meta:
         model = Recipe
         fields = ('id', 'tags', 'ingredients', 'name', 'image',
                   'text', 'cooking_time')
+        extra_kwargs = {
+            'image': {'required': True, 'allow_blank': False}
+        }
 
     def validate(self, attrs):
         ingredients_data = attrs.get('ingredients')
@@ -235,7 +241,7 @@ class RecipeAddSerializer(serializers.ModelSerializer):
             if not item:
                 raise serializers.ValidationError(
                     '''Поля image, cooking_time, ingredients,
-                    'tags не могут быть пустыми.'''
+                    tags не могут быть пустыми.'''
                 )
         ingredient_ids = [ingredient['id'] for ingredient in ingredients_data]
         tags_ids = [tag for tag in tags_data]
@@ -268,17 +274,13 @@ class RecipeAddSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def update(self, instance, validated_data):
-        ingredients_data = validated_data.get('ingredients')
-        tags_data = validated_data.get('tags')
-        if tags_data:
-            instance.tags.set(tags_data)
-
-        if ingredients_data:
-            instance.recipesingredients.all().delete()
-            self.add_ingredients(instance, ingredients_data)
-
-        if 'image' in validated_data:
-            instance.image = validated_data.get('image', instance.image)
+        tags = validated_data.pop('tags', None)
+        ingredients = validated_data.pop('ingredients', None)
+        instance = super().update(instance, validated_data)
+        instance.tags.set(tags)
+        instance.ingredients.clear()
+        self.add_ingredients(instance, ingredients)
+        instance.image = validated_data.get('image', instance.image)
         instance.save()
         return instance
 
