@@ -12,6 +12,7 @@ from rest_framework.permissions import (IsAuthenticated,
 from rest_framework.response import Response
 
 from api.filters import IngredientFilter, RecipeFilter
+from api.permissions import IsAuthorOrReadOnly
 from recipes.models import (Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag, Favorites)
 from users.models import Subscription
@@ -24,7 +25,6 @@ from .serializers import (AvatarUpdateSerializer, IngredientSerializer,
 
 User = get_user_model()
 
-# BASE_URL = 'http://127.0.0.1:8000/'
 BASE_URL = os.getenv('BASE_URL')
 
 
@@ -119,22 +119,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
     """
 
     queryset = Recipe.objects.all()
+    permission_classes = (IsAuthorOrReadOnly,)
     filter_backends = (DjangoFilterBackend, )
     filterset_class = RecipeFilter
-
-    def partial_update(self, request, *args, **kwargs):
-        recipe_id = self.kwargs['pk']
-        recipe = get_object_or_404(Recipe, id=recipe_id)
-        if recipe.author != request.user:
-            return Response(
-                {'errors': 'Недостаточно прав для обновления рецепта.'},
-                status=status.HTTP_403_FORBIDDEN)
-        serializer = self.get_serializer(recipe, data=request.data,
-                                         partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get_serializer_class(self):
         if self.request.method == 'GET':

@@ -221,27 +221,27 @@ class RecipeAddSerializer(serializers.ModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(),
                                               many=True,
                                               required=True,)
-    image = Base64ImageField()
+    image = Base64ImageField(required=True, allow_null=False)
 
     class Meta:
         model = Recipe
         fields = ('id', 'tags', 'ingredients', 'name', 'image',
                   'text', 'cooking_time')
-        extra_kwargs = {
-            'image': {'required': True, 'allow_blank': False}
-        }
 
     def validate(self, attrs):
         ingredients_data = attrs.get('ingredients')
         tags_data = attrs.get('tags')
         cooking_time_data = attrs.get('cooking_time')
         image_data = attrs.get('image')
-        for item in [ingredients_data, tags_data, cooking_time_data,
-                     image_data]:
+        if not image_data:
+            raise serializers.ValidationError(
+                'Загрузите картинку рецепта'
+            )
+        for item in [ingredients_data, tags_data, cooking_time_data]:
             if not item:
                 raise serializers.ValidationError(
-                    '''Поля image, cooking_time, ingredients,
-                    tags не могут быть пустыми.'''
+                    '''Поля cooking_time, ingredients,
+                    tags не могут быть пустыми. '''
                 )
         ingredient_ids = [ingredient['id'] for ingredient in ingredients_data]
         tags_ids = [tag for tag in tags_data]
@@ -276,11 +276,11 @@ class RecipeAddSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         tags = validated_data.pop('tags', None)
         ingredients = validated_data.pop('ingredients', None)
+        instance.image = validated_data.get('image', instance.image)
         instance = super().update(instance, validated_data)
         instance.tags.set(tags)
         instance.ingredients.clear()
         self.add_ingredients(instance, ingredients)
-        instance.image = validated_data.get('image', instance.image)
         instance.save()
         return instance
 
