@@ -48,7 +48,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=250, verbose_name='Название блюда')),
                 ('text', models.TextField(max_length=4000, verbose_name='Описание рецепта')),
                 ('cooking_time', models.PositiveSmallIntegerField(default=1, validators=[django.core.validators.MinValueValidator(1, 'Не менее 1 минуты на приготовление')], verbose_name='Время приготовления')),
-                ('image', models.ImageField(blank=True, upload_to='recipes_images/', verbose_name='Изображение')),
+                ('image', models.ImageField(upload_to='recipes_images/', verbose_name='Изображение')),
                 ('pub_date', models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')),
                 ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='recipes', to=settings.AUTH_USER_MODEL, verbose_name='Автор рецепта')),
             ],

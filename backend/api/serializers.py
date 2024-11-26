@@ -68,7 +68,7 @@ class AvatarUpdateSerializer(serializers.ModelSerializer):
 
 class RecipeShortSerializer(serializers.ModelSerializer):
     """Сериализатор для краткого отображения рецептов."""
-    image = Base64ImageField(read_only=True)
+    image = Base64ImageField()
     name = serializers.ReadOnlyField()
     cooking_time = serializers.ReadOnlyField()
 
@@ -221,22 +221,24 @@ class RecipeAddSerializer(serializers.ModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(),
                                               many=True,
                                               required=True,)
-    image = Base64ImageField(required=True, allow_null=False)
+    image = Base64ImageField(required=True, use_url=True)
 
     class Meta:
         model = Recipe
         fields = ('id', 'tags', 'ingredients', 'name', 'image',
                   'text', 'cooking_time')
 
+    def validate_image(self, img):
+        if not img:
+            raise serializers.ValidationError(
+                'Загрузите изображение рецепта.'
+            )
+        return img
+
     def validate(self, attrs):
         ingredients_data = attrs.get('ingredients')
         tags_data = attrs.get('tags')
         cooking_time_data = attrs.get('cooking_time')
-        image_data = attrs.get('image')
-        if not image_data:
-            raise serializers.ValidationError(
-                'Загрузите картинку рецепта'
-            )
         for item in [ingredients_data, tags_data, cooking_time_data]:
             if not item:
                 raise serializers.ValidationError(
@@ -276,7 +278,6 @@ class RecipeAddSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         tags = validated_data.pop('tags', None)
         ingredients = validated_data.pop('ingredients', None)
-        instance.image = validated_data.get('image', instance.image)
         instance = super().update(instance, validated_data)
         instance.tags.set(tags)
         instance.ingredients.clear()
