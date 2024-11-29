@@ -1,5 +1,3 @@
-import os
-
 from django.contrib.auth import get_user_model
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Sum
@@ -13,23 +11,34 @@ from rest_framework.response import Response
 
 from api.filters import IngredientFilter, RecipeFilter
 from api.permissions import IsAuthorOrReadOnly
+from foodgram.settings import BASE_URL
 from recipes.models import (Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag, Favorites)
 from users.models import Subscription
 from .serializers import (AvatarUpdateSerializer, IngredientSerializer,
                           FavoritesSerializer, RecipeAddSerializer,
                           RecipeGetSerializer, ShoppingCartSerializer,
-                          TagSerialiser, UserMakeSubscribeSerializer,
+                          TagSerialiser, UserInfoSerializer,
+                          UserMakeSubscribeSerializer,
                           UserSubscriptionsSerializer)
 
 
 User = get_user_model()
 
-BASE_URL = os.getenv('BASE_URL')
-
 
 class SubscriptionsUserViewSet(UserViewSet):
-    """Вьюсет для работы с подписками."""
+    """Вьюсет для работы с подписками и профилем."""
+
+    @action(
+            detail=False,
+            methods=('GET', ),
+            pagination_class=None,
+            permission_classes=(IsAuthenticated,)
+        )
+    def me(self, request):
+        serializer = UserInfoSerializer(request.user)
+        return Response(serializer.data,
+                        status=status.HTTP_200_OK)
 
     @action(
         detail=True,
@@ -131,17 +140,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-    def destroy(self, request, *args, **kwargs):
-        recipe_id = self.kwargs['pk']
-        recipe = get_object_or_404(Recipe, id=recipe_id)
-
-        if recipe.author != request.user:
-            return Response(
-                {'errors': 'Недостаточно прав для удаления данного рецепта.'},
-                status=status.HTTP_403_FORBIDDEN)
-        recipe.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
     @staticmethod
     def add_recipe_to_cart_or_favorite(request, recipe, serializer):
         serializer = serializer(
@@ -180,12 +178,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if request.method == 'POST':
             return self.add_recipe_to_cart_or_favorite(request, recipe,
                                                        ShoppingCartSerializer)
-
-        if request.method == 'DELETE':
-            return self.delete_recipe_from_cart_or_favorite(
-                request, ShoppingCart, recipe,
-                'Данный рецепт не содержится в списке покупок'
-            )
+        return self.delete_recipe_from_cart_or_favorite(
+            request, ShoppingCart, recipe,
+            'Данный рецепт не содержится в списке покупок'
+        )
 
     @action(
         detail=False,
@@ -205,8 +201,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
             amount = ingredient['ingredient_amount']
             shopping_list.append(f'\n{name}, {amount}, {measurement_unit}')
         response = HttpResponse(shopping_list, content_type='text/plain')
-        response['Content-Disposition'] = \
+        response['Content-Disposition'] = (
             'attachment; filename="shopping_cart.txt"'
+        )
         return response
 
     @action(
@@ -218,9 +215,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if request.method == 'POST':
             return self.add_recipe_to_cart_or_favorite(request, recipe,
                                                        FavoritesSerializer)
-
-        if request.method == 'DELETE':
-            return self.delete_recipe_from_cart_or_favorite(
-                request, Favorites, recipe,
-                'Данный рецепт не содержится в избранном'
-            )
+        return self.delete_recipe_from_cart_or_favorite(
+            request, Favorites, recipe,
+            'Данный рецепт не содержится в избранном'
+        )

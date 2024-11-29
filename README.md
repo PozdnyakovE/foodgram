@@ -18,9 +18,9 @@ Foodgram - дипломный проект курса Backend-разработк
 
 1. Необходимо установить приложение Docker необходимой версии (в зависимости от ОС).
 2. В корне проекта создать файл .env, в котором прописать необходимые переменные.
-4. Выполните команду `docker-compose up -d --buld`.
-5. Выполните миграции `docker-compose exec backend python manage.py migrate`.
-6. Создайте суперюзера `docker-compose exec backend python manage.py createsuperuser`.
-7. Соберите статику `docker-compose exec backend python manage.py collectstatic --no-input`.
-8. Заполните базу ингредиентами `docker-compose exec backend python manage.py runscript load_from_csv`.
-9. Зайдите под суперпользователем в админ-зону сайта и создайте несколько тегов.
+3. Выполните команду `docker-compose up -d --buld`.
+4. Выполните миграции `docker-compose exec backend python manage.py migrate`.
+5. Соберите статику `docker-compose exec backend python manage.py collectstatic --no-input`.
+6. Копировать статику в volume `docker compose exec backend cp -r /app/collected_static/. /backend_static/static/`.
+7. Заполните базу ингредиентами `docker-compose exec backend python manage.py runscript load_from_csv`.
+8. Заполните базу тестовыми фикстурами `docker compose exec backend python manage.py loaddata data/initial_fixtures.json `.

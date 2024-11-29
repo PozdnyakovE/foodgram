@@ -1,0 +1,254 @@
+[
+{
+  "model": "recipes.tag",
+  "pk": 1,
+  "fields": {
+    "name": "завтрак",
+    "slug": "breakfast"
+  }
+},
+{
+  "model": "recipes.tag",
+  "pk": 2,
+  "fields": {
+    "name": "обед",
+    "slug": "dinner"
+  }
+},
+{
+  "model": "recipes.tag",
+  "pk": 3,
+  "fields": {
+    "name": "ужин",
+    "slug": "supper"
+  }
+},
+{
+  "model": "recipes.recipe",
+  "pk": 3,
+  "fields": {
+    "name": "Что-то в лаваше",
+    "author": 6,
+    "text": "Взять всё, завернуть в лаваш",
+    "cooking_time": 10,
+    "image": "recipes_images/1.jpg",
+    "pub_date": "2024-11-29T16:04:04.842Z",
+    "tags": [
+      1,
+      2,
+      3
+    ]
+  }
+},
+{
+  "model": "recipes.recipe",
+  "pk": 4,
+  "fields": {
+    "name": "Котлета с макаронами",
+    "author": 6,
+    "text": "Пожарить котлеты, сварить макароны",
+    "cooking_time": 30,
+    "image": "recipes_images/2.jpg",
+    "pub_date": "2024-11-29T16:05:06.212Z",
+    "tags": [
+      2,
+      3
+    ]
+  }
+},
+{
+  "model": "recipes.recipe",
+  "pk": 5,
+  "fields": {
+    "name": "Рыба с картофелем",
+    "author": 7,
+    "text": "Пожарить рыбу, сварить картофель",
+    "cooking_time": 40,
+    "image": "recipes_images/3.jpg",
+    "pub_date": "2024-11-29T16:06:15.541Z",
+    "tags": [
+      2,
+      3
+    ]
+  }
+},
+{
+  "model": "recipes.recipe",
+  "pk": 6,
+  "fields": {
+    "name": "Мясо с овощами",
+    "author": 7,
+    "text": "Пожарить мясо, нарезать овощи",
+    "cooking_time": 50,
+    "image": "recipes_images/4.jpg",
+    "pub_date": "2024-11-29T16:07:10.247Z",
+    "tags": [
+      3
+    ]
+  }
+},
+{
+  "model": "recipes.recipeingredient",
+  "pk": 4,
+  "fields": {
+    "recipe": 3,
+    "ingredient": 811,
+    "amount": 300
+  }
+},
+{
+  "model": "recipes.recipeingredient",
+  "pk": 5,
+  "fields": {
+    "recipe": 3,
+    "ingredient": 435,
+    "amount": 100
+  }
+},
+{
+  "model": "recipes.recipeingredient",
+  "pk": 6,
+  "fields": {
+    "recipe": 3,
+    "ingredient": 1692,
+    "amount": 100
+  }
+},
+{
+  "model": "recipes.recipeingredient",
+  "pk": 7,
+  "fields": {
+    "recipe": 3,
+    "ingredient": 1689,
+    "amount": 200
+  }
+},
+{
+  "model": "recipes.recipeingredient",
+  "pk": 8,
+  "fields": {
+    "recipe": 4,
+    "ingredient": 1102,
+    "amount": 400
+  }
+},
+{
+  "model": "recipes.recipeingredient",
+  "pk": 9,
+  "fields": {
+    "recipe": 4,
+    "ingredient": 914,
+    "amount": 300
+  }
+},
+{
+  "model": "recipes.recipeingredient",
+  "pk": 10,
+  "fields": {
+    "recipe": 5,
+    "ingredient": 1490,
+    "amount": 300
+  }
+},
+{
+  "model": "recipes.recipeingredient",
+  "pk": 11,
+  "fields": {
+    "recipe": 5,
+    "ingredient": 556,
+    "amount": 500
+  }
+},
+{
+  "model": "recipes.recipeingredient",
+  "pk": 12,
+  "fields": {
+    "recipe": 6,
+    "ingredient": 1105,
+    "amount": 400
+  }
+},
+{
+  "model": "recipes.recipeingredient",
+  "pk": 13,
+  "fields": {
+    "recipe": 6,
+    "ingredient": 1341,
+    "amount": 200
+  }
+},
+{
+  "model": "recipes.recipeingredient",
+  "pk": 14,
+  "fields": {
+    "recipe": 6,
+    "ingredient": 436,
+    "amount": 200
+  }
+},
+{
+  "model": "users.user",
+  "pk": 1,
+  "fields": {
+    "last_login": "2024-11-29T15:40:42.402Z",
+    "is_superuser": true,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2024-11-29T15:40:32.325Z",
+    "email": "root@root.ru",
+    "username": "root",
+    "first_name": "",
+    "last_name": "",
+    "password": "pbkdf2_sha256$260000$a9xBIzRVdBvHTSubjmmcNa$wAJcsQLrLPV+GEP8pxCsPtaFDotBH/x7liqMTQHpY9k=",
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 6,
+  "fields": {
+    "last_login": "2024-11-29T16:03:03.525Z",
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2024-11-29T16:02:25.753Z",
+    "email": "user1@user.ru",
+    "username": "Firstuser",
+    "first_name": "First",
+    "last_name": "User",
+    "password": "pbkdf2_sha256$260000$xzQvXPNsZ8BpvGjx4tEhBR$YxeRGIxa3B6Wn+wssbyx++JHAntUk4ulOdiDBKzzNVw=",
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 7,
+  "fields": {
+    "last_login": "2024-11-29T16:05:30.472Z",
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2024-11-29T16:02:55.998Z",
+    "email": "user2@user.ru",
+    "username": "SecondUser",
+    "first_name": "Second",
+    "last_name": "User",
+    "password": "pbkdf2_sha256$260000$CWPtEIVH3BAFtE2wbZTb31$196Qg6IV439a0EqsgP9hu3V2xIpHZKWyKR2rYqDpmhk=",
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "authtoken.token",
+  "pk": "2e25039a3dc9f3f4d717bc43750bf677049ae546",
+  "fields": {
+    "user": 7,
+    "created": "2024-11-29T16:05:30.469Z"
+  }
+}
+]
