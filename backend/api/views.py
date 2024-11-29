@@ -30,11 +30,11 @@ class SubscriptionsUserViewSet(UserViewSet):
     """Вьюсет для работы с подписками и профилем."""
 
     @action(
-            detail=False,
-            methods=('GET', ),
-            pagination_class=None,
-            permission_classes=(IsAuthenticated,)
-        )
+        detail=False,
+        methods=('GET', ),
+        pagination_class=None,
+        permission_classes=(IsAuthenticated,),
+    )
     def me(self, request):
         serializer = UserInfoSerializer(request.user)
         return Response(serializer.data,
