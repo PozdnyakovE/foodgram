@@ -31,7 +31,7 @@
     "author": 6,
     "text": "Взять всё, завернуть в лаваш",
     "cooking_time": 10,
-    "image": "data/initial_recipe_images/1.jpg",
+    "image": "recipes_images/1.jpg",
     "pub_date": "2024-11-29T16:04:04.842Z",
     "tags": [
       1,
@@ -48,7 +48,7 @@
     "author": 6,
     "text": "Пожарить котлеты, сварить макароны",
     "cooking_time": 30,
-    "image": "data/initial_recipe_images/2.jpg",
+    "image": "recipes_images/2.jpg",
     "pub_date": "2024-11-29T16:05:06.212Z",
     "tags": [
       2,
@@ -64,7 +64,7 @@
     "author": 7,
     "text": "Пожарить рыбу, сварить картофель",
     "cooking_time": 40,
-    "image": "data/initial_recipe_images/3.jpg",
+    "image": "recipes_images/3.jpg",
     "pub_date": "2024-11-29T16:06:15.541Z",
     "tags": [
       2,
@@ -80,7 +80,7 @@
     "author": 7,
     "text": "Пожарить мясо, нарезать овощи",
     "cooking_time": 50,
-    "image": "data/initial_recipe_images/4.jpg",
+    "image": "recipes_images/4.jpg",
     "pub_date": "2024-11-29T16:07:10.247Z",
     "tags": [
       3
